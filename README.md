@@ -1,4 +1,4 @@
-# MHP Takeaway Home
+# MHP Takeaway Home Challenge
 
 
 A full-stack movie application with favorites functionality, built with Next.js frontend and NestJS backend.
@@ -19,12 +19,10 @@ cd backend
 # Install dependencies
 npm install
 
-# Create .env file from example
-cp .env.example .env
 
-# Edit .env and add your OMDb API key
-# OMDB_API_KEY=your_actual_api_key_here
-# OMDB_BASE_URL=https://www.omdbapi.com/
+Edit .env and add your OMDb API key
+OMDB_API_KEY=your_actual_api_key_here
+OMDB_BASE_URL=https://www.omdbapi.com/
 
 # Start the backend server
 npm run start

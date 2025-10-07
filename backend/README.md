@@ -41,9 +41,7 @@ npm install
 
 Create a `.env` file in the backend directory:
 
-```bash
-cp .env.example .env
-```
+
 
 Edit `.env` and add your OMDb API key:
 
