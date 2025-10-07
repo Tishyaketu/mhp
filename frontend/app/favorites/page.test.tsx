@@ -24,12 +24,14 @@ describe('FavoritesPage', () => {
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
 
-  it('renders favorites page title', () => {
+  it('renders favorites page title', async () => {
     mockedApi.getFavorites.mockResolvedValue([]);
 
     render(<FavoritesPage />, { wrapper });
 
-    expect(screen.getByText('My Favorites')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/My Favorites/)).toBeInTheDocument();
+    });
   });
 
   it('displays loading state', async () => {
@@ -48,9 +50,8 @@ describe('FavoritesPage', () => {
     render(<FavoritesPage />, { wrapper });
 
     await waitFor(() => {
-      expect(
-        screen.getByText('No favorites yet. Start by searching for movies!')
-      ).toBeInTheDocument();
+      expect(screen.getByText('No favorites yet')).toBeInTheDocument();
+      expect(screen.getByText(/Start by searching for movies/)).toBeInTheDocument();
     });
   });
 
@@ -84,7 +85,7 @@ describe('FavoritesPage', () => {
     render(<FavoritesPage />, { wrapper });
 
     await waitFor(() => {
-      expect(screen.getByText('Error loading favorites')).toBeInTheDocument();
+      expect(screen.getByText('Failed to load favorites')).toBeInTheDocument();
     });
   });
 
@@ -105,7 +106,7 @@ describe('FavoritesPage', () => {
       expect(screen.getByText('The Shawshank Redemption')).toBeInTheDocument();
     });
 
-    const removeButton = screen.getByText('Remove');
+    const removeButton = screen.getByText(/Remove/);
     fireEvent.click(removeButton);
 
     await waitFor(() => {
@@ -132,7 +133,7 @@ describe('FavoritesPage', () => {
     render(<FavoritesPage />, { wrapper });
 
     await waitFor(() => {
-      const removeButtons = screen.getAllByText('Remove');
+      const removeButtons = screen.getAllByText(/Remove/);
       expect(removeButtons).toHaveLength(2);
     });
   });

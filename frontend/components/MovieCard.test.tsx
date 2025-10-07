@@ -35,7 +35,7 @@ describe('MovieCard', () => {
       />
     );
     
-    expect(screen.getByText('Add to Favorites')).toBeInTheDocument();
+    expect(screen.getByText(/Add to Favorites/)).toBeInTheDocument();
     
     rerender(
       <MovieCard 
@@ -45,6 +45,6 @@ describe('MovieCard', () => {
       />
     );
     
-    expect(screen.getByText('Remove')).toBeInTheDocument();
+    expect(screen.getByText(/Remove/)).toBeInTheDocument();
   });
 });

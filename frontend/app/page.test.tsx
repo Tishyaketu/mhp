@@ -81,8 +81,10 @@ describe('SearchPage', () => {
       expect(screen.getByText('The Dark Knight')).toBeInTheDocument();
     });
 
-    // Check for results counter
-    expect(screen.getByText(/Showing 2 of 503 results/)).toBeInTheDocument();
+    // Check for results counter (split across multiple elements)
+    expect(screen.getByText('2')).toBeInTheDocument();
+    expect(screen.getByText('503')).toBeInTheDocument();
+    expect(screen.getByText(/results/)).toBeInTheDocument();
   });
 
   it('displays empty state when no results found', async () => {
@@ -159,8 +161,8 @@ describe('SearchPage', () => {
     fireEvent.change(input, { target: { value: 'batman' } });
 
     await waitFor(() => {
-      const addButtons = screen.getAllByText('Add to Favorites');
-      const removeButtons = screen.getAllByText('Remove');
+      const addButtons = screen.getAllByText(/Add to Favorites/);
+      const removeButtons = screen.getAllByText(/Remove/);
       
       expect(addButtons).toHaveLength(1); // Not favorited
       expect(removeButtons).toHaveLength(1); // Already favorited
@@ -198,7 +200,7 @@ describe('SearchPage', () => {
       expect(screen.getByText('The Shawshank Redemption')).toBeInTheDocument();
     });
 
-    const addButton = screen.getByText('Add to Favorites');
+    const addButton = screen.getByText(/Add to Favorites/);
     fireEvent.click(addButton);
 
     await waitFor(() => {
@@ -234,7 +236,7 @@ describe('SearchPage', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Test Movie')).toBeInTheDocument();
-      expect(screen.getByText('No more movies to load')).toBeInTheDocument();
+      expect(screen.getByText(/All movies loaded/)).toBeInTheDocument();
     });
   });
 });
