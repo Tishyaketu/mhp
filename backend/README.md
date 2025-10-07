@@ -25,36 +25,91 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Project setup
+## Prerequisites
 
+1. Node.js 18 or higher
+2. OMDb API key from [https://www.omdbapi.com/apikey.aspx](https://www.omdbapi.com/apikey.aspx)
+
+## Setup
+
+### 1. Install Dependencies
 ```bash
-$ npm install
+npm install
 ```
 
-## Compile and run the project
+### 2. Configure Environment Variables
+
+Create a `.env` file in the backend directory:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+cp .env.example .env
 ```
 
-## Run tests
+Edit `.env` and add your OMDb API key:
+
+```env
+OMDB_API_KEY=your_actual_api_key_here
+OMDB_BASE_URL=https://www.omdbapi.com/
+```
+
+**⚠️ Important:** Without a valid API key, the movie search functionality will not work!
+
+### 3. Run the Application
 
 ```bash
-# unit tests
-$ npm run test
+# Development mode (with hot reload)
+npm run start:dev
 
-# e2e tests
-$ npm run test:e2e
+# Production mode
+npm run start:prod
+```
 
-# test coverage
-$ npm run test:cov
+The backend will start on **http://localhost:3001**
+
+## API Endpoints
+
+### Movies
+- `GET /movies/search?q={query}&page={page}` - Search movies with pagination
+  - Query params:
+    - `q` (required): Search query
+    - `page` (optional): Page number (default: 1)
+  - Response: `{ movies: Movie[], totalResults: number, currentPage: number, totalPages: number }`
+
+### Favorites
+- `GET /favorites` - Get all favorite movies
+- `POST /favorites` - Add a movie to favorites
+  - Body: `{ imdbID: string, Title: string, Year: string, Poster: string | null }`
+- `DELETE /favorites/:imdbID` - Remove a movie from favorites
+
+## Database
+
+The application uses **SQLite** for storing favorites:
+- Database file: `favorites.db` (auto-created on first run)
+- Schema created automatically
+- Data persists between server restarts
+
+## Testing
+
+```bash
+# Run unit tests
+npm test
+
+# Run tests with coverage
+npm test -- --coverage
+
+# Run tests in watch mode
+npm test -- --watch
+```
+
+## Project Structure
+
+```
+src/
+├── movies/           # Movie search module (OMDb API integration)
+├── favorites/        # Favorites management module  
+├── database/         # SQLite database service
+├── app.module.ts     # Main application module
+└── main.ts           # Application entry point
 ```
 
 ## Deployment

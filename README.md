@@ -1,4 +1,5 @@
-# MHP3 Movie App
+# MHP Takeaway Home
+
 
 A full-stack movie application with favorites functionality, built with Next.js frontend and NestJS backend.
 
@@ -103,17 +104,48 @@ GET    /movies/search?q=... # Search movies (OMDB API)
 ## Development Workflow
 
 ### Setup
-```bash
-# Backend
-cd backend
-npm install
-npm run start:dev
 
-# Frontend
-cd frontend
+#### Prerequisites
+1. **Node.js** 18+ installed
+2. **OMDb API Key**: Get a free API key from [https://www.omdbapi.com/apikey.aspx](https://www.omdbapi.com/apikey.aspx)
+
+#### Backend Setup
+```bash
+# Navigate to backend directory
+cd backend
+
+# Install dependencies
 npm install
-npm run dev
+
+# Create .env file from example
+cp .env.example .env
+
+# Edit .env and add your OMDb API key
+# OMDB_API_KEY=your_actual_api_key_here
+# OMDB_BASE_URL=https://www.omdbapi.com/
+
+# Start the backend server
+npm run start:dev
+# Backend will run on http://localhost:3001
 ```
+
+#### Frontend Setup
+```bash
+# Navigate to frontend directory (in a new terminal)
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start the frontend server
+npm run dev
+# Frontend will run on http://localhost:3000
+```
+
+#### Important Notes
+- ⚠️ **You must create a `.env` file** in the `backend` directory with your OMDb API key
+- The `.env` file is gitignored for security (it contains your API key)
+- Without the API key, movie search will not work
 
 ### Testing
 ```bash
