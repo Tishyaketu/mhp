@@ -1,8 +1,8 @@
 // frontend/app/page.tsx
 'use client';
 
-import { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState, useEffect, useCallback } from 'react';
+import { useInfiniteQuery, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { searchMovies, getFavorites, addFavorite, removeFavorite, Movie } from '@/lib/api';
 import { MovieCard } from '@/components/MovieCard';
 
@@ -10,11 +10,25 @@ export default function SearchPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const queryClient = useQueryClient();
 
-  // M1: Search movies
-  const { data: searchData, isLoading, error } = useQuery({
+  // M1: Search movies with infinite scrolling
+  const {
+    data: searchData,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: ['search', searchQuery],
-    queryFn: () => searchMovies(searchQuery),
+    queryFn: ({ pageParam = 1 }) => searchMovies(searchQuery, pageParam),
     enabled: searchQuery.length > 0,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.currentPage < lastPage.totalPages) {
+        return lastPage.currentPage + 1;
+      }
+      return undefined;
+    },
+    initialPageParam: 1,
   });
 
   // M2: Get favorites to check status
@@ -51,6 +65,26 @@ export default function SearchPage() {
     }
   };
 
+  // Infinite scroll handler
+  const handleScroll = useCallback(() => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.offsetHeight - 1000 && // Load more when 1000px from bottom
+      hasNextPage &&
+      !isFetchingNextPage
+    ) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
+
+  // Flatten all pages into a single array of movies
+  const allMovies = searchData?.pages?.flatMap(page => page.movies) || [];
+
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Search Movies</h1>
@@ -75,20 +109,27 @@ export default function SearchPage() {
       )}
 
       {/* M6: OMDb API error */}
-      {searchData?.error && (
+      {searchData?.pages?.[0]?.error && (
         <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">
-          {searchData.error}
+          {searchData.pages[0].error}
         </div>
       )}
 
       {/* M6: Empty state */}
-      {searchData?.movies?.length === 0 && !searchData.error && (
+      {allMovies.length === 0 && !searchData?.pages?.[0]?.error && searchQuery && !isLoading && (
         <p className="text-gray-500">No movies found</p>
+      )}
+
+      {/* Results count */}
+      {searchData?.pages?.[0]?.totalResults > 0 && (
+        <p className="text-sm text-gray-600 mb-4">
+          Showing {allMovies.length} of {searchData.pages[0].totalResults} results
+        </p>
       )}
 
       {/* Movie grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {searchData?.movies?.map((movie: Movie) => (
+        {allMovies.map((movie: Movie) => (
           <MovieCard
             key={movie.imdbID}
             movie={movie}
@@ -97,6 +138,20 @@ export default function SearchPage() {
           />
         ))}
       </div>
+
+      {/* Load more indicator */}
+      {isFetchingNextPage && (
+        <div className="text-center py-4">
+          <p className="text-gray-500">Loading more movies...</p>
+        </div>
+      )}
+
+      {/* End of results indicator */}
+      {!hasNextPage && allMovies.length > 0 && (
+        <div className="text-center py-4">
+          <p className="text-gray-500">No more movies to load</p>
+        </div>
+      )}
     </div>
   );
 }

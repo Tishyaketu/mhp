@@ -10,10 +10,10 @@ export interface Movie {
   Poster: string | null;
 }
 
-// M1: Search movies
-export const searchMovies = async (query: string) => {
+// M1: Search movies with pagination
+export const searchMovies = async (query: string, page: number = 1) => {
   const { data } = await axios.get(`${API_URL}/movies/search`, {
-    params: { q: query },
+    params: { q: query, page },
   });
   return data;
 };
