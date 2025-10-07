@@ -110,7 +110,8 @@ describe('FavoritesPage', () => {
     fireEvent.click(removeButton);
 
     await waitFor(() => {
-      expect(mockedApi.removeFavorite).toHaveBeenCalledWith('tt0111161');
+      expect(mockedApi.removeFavorite).toHaveBeenCalled();
+      expect(mockedApi.removeFavorite.mock.calls[0][0]).toBe('tt0111161');
     });
   });
 

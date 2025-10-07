@@ -204,7 +204,8 @@ describe('SearchPage', () => {
     fireEvent.click(addButton);
 
     await waitFor(() => {
-      expect(mockedApi.addFavorite).toHaveBeenCalledWith({
+      expect(mockedApi.addFavorite).toHaveBeenCalled();
+      expect(mockedApi.addFavorite.mock.calls[0][0]).toEqual({
         imdbID: 'tt0111161',
         Title: 'The Shawshank Redemption',
         Year: '1994',

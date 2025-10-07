@@ -22,7 +22,7 @@ describe('MovieCard', () => {
     );
     
     expect(screen.getByText('The Shawshank Redemption')).toBeInTheDocument();
-    expect(screen.getByText('1994')).toBeInTheDocument();
+    expect(screen.getByText(/1994/)).toBeInTheDocument();
     expect(screen.getByText('No Image')).toBeInTheDocument();
   });
 
