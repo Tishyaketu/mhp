@@ -30,7 +30,7 @@ OMDB_BASE_URL=https://www.omdbapi.com/
 
 ```bash
 # Start the backend
-npm run start:dev
+npm run start
 ```
 
 ✅ Backend should now be running on **http://localhost:3001**

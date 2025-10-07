@@ -58,7 +58,7 @@ OMDB_BASE_URL=https://www.omdbapi.com/
 
 ```bash
 # Development mode (with hot reload)
-npm run start:dev
+npm run start
 
 # Production mode
 npm run start:prod

@@ -3,6 +3,70 @@
 
 A full-stack movie application with favorites functionality, built with Next.js frontend and NestJS backend.
 
+## Development Workflow
+
+### Setup
+
+#### Prerequisites
+1. **Node.js** 18+ installed
+2. **OMDb API Key**: Get a free API key from [https://www.omdbapi.com/apikey.aspx](https://www.omdbapi.com/apikey.aspx)
+
+#### Backend Setup
+```bash
+# Navigate to backend directory
+cd backend
+
+# Install dependencies
+npm install
+
+# Create .env file from example
+cp .env.example .env
+
+# Edit .env and add your OMDb API key
+# OMDB_API_KEY=your_actual_api_key_here
+# OMDB_BASE_URL=https://www.omdbapi.com/
+
+# Start the backend server
+npm run start
+# Backend will run on http://localhost:3001
+```
+
+#### Frontend Setup
+```bash
+# Navigate to frontend directory (in a new terminal)
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start the frontend server
+npm run dev
+# Frontend will run on http://localhost:3000
+```
+
+#### Important Notes
+- ⚠️ **You must create a `.env` file** in the `backend` directory with your OMDb API key
+- The `.env` file is gitignored for security (it contains your API key)
+- Without the API key, movie search will not work
+
+### Testing
+```bash
+# Backend tests
+cd backend
+npm test
+
+# Frontend tests
+cd frontend
+npm test
+```
+
+### Database
+- SQLite database file: `backend/favorites.db`
+- Automatic schema creation on startup
+- Seed data included for development
+
+
+
 ## Architecture Overview
 
 ### Frontend (Next.js 15 + TypeScript)
@@ -100,83 +164,3 @@ GET    /movies/search?q=... # Search movies (OMDB API)
 - Network request failures with retry logic
 - Loading and error states in UI components
 - Validation errors for API requests
-
-## Development Workflow
-
-### Setup
-
-#### Prerequisites
-1. **Node.js** 18+ installed
-2. **OMDb API Key**: Get a free API key from [https://www.omdbapi.com/apikey.aspx](https://www.omdbapi.com/apikey.aspx)
-
-#### Backend Setup
-```bash
-# Navigate to backend directory
-cd backend
-
-# Install dependencies
-npm install
-
-# Create .env file from example
-cp .env.example .env
-
-# Edit .env and add your OMDb API key
-# OMDB_API_KEY=your_actual_api_key_here
-# OMDB_BASE_URL=https://www.omdbapi.com/
-
-# Start the backend server
-npm run start:dev
-# Backend will run on http://localhost:3001
-```
-
-#### Frontend Setup
-```bash
-# Navigate to frontend directory (in a new terminal)
-cd frontend
-
-# Install dependencies
-npm install
-
-# Start the frontend server
-npm run dev
-# Frontend will run on http://localhost:3000
-```
-
-#### Important Notes
-- ⚠️ **You must create a `.env` file** in the `backend` directory with your OMDb API key
-- The `.env` file is gitignored for security (it contains your API key)
-- Without the API key, movie search will not work
-
-### Testing
-```bash
-# Backend tests
-cd backend
-npm test
-
-# Frontend tests
-cd frontend
-npm test
-```
-
-### Database
-- SQLite database file: `backend/favorites.db`
-- Automatic schema creation on startup
-- Seed data included for development
-
-## Future Considerations
-
-### Scalability
-- **Database**: Consider PostgreSQL for production scale
-- **Caching**: Add Redis for API response caching
-- **CDN**: Implement CDN for movie poster images
-
-### Features
-- **User Authentication**: Add user accounts and personal favorites
-- **Search History**: Persist user search history
-- **Recommendations**: Implement movie recommendation engine
-- **Offline Support**: Add PWA capabilities for offline access
-
-### Performance
-- **Image Optimization**: Implement lazy loading for movie posters
-- **API Rate Limiting**: Add rate limiting for external API calls
-- **Database Indexing**: Add proper indexes for query optimization
